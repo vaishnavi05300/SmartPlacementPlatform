@@ -1,4 +1,6 @@
+
 package com.smartplacement.Demo.service;
+
 import com.nimbusds.jose.jwk.source.ImmutableSecret;
 import org.springframework.security.oauth2.jose.jws.MacAlgorithm;
 import org.springframework.security.oauth2.jwt.*;
@@ -13,19 +15,24 @@ import java.time.temporal.ChronoUnit;
 @Service
 public class JwtService {
 
-    private static final String SECRET =
-            "smartplacement-demo-jwt-secret-key-change-this-2026";
-
     private final JwtEncoder jwtEncoder;
 
     public JwtService() {
+        String secret = System.getenv("JWT_SECRET");
+
+        if (secret == null || secret.length() < 32) {
+            throw new IllegalStateException(
+                "JWT_SECRET must be set and contain at least 32 characters"
+            );
+        }
+
         SecretKey secretKey = new SecretKeySpec(
-                SECRET.getBytes(StandardCharsets.UTF_8),
-                "HmacSHA256"
+            secret.getBytes(StandardCharsets.UTF_8),
+            "HmacSHA256"
         );
 
         this.jwtEncoder = new NimbusJwtEncoder(
-                new ImmutableSecret<>(secretKey)
+            new ImmutableSecret<>(secretKey)
         );
     }
 
@@ -33,20 +40,19 @@ public class JwtService {
         Instant now = Instant.now();
 
         JwtClaimsSet claims = JwtClaimsSet.builder()
-                .issuer("smart-placement-platform")
-                .issuedAt(now)
-                .expiresAt(now.plus(2, ChronoUnit.HOURS))
-                .subject(email)
-                .claim("role", role)
-                .build();
+            .issuer("smart-placement-platform")
+            .issuedAt(now)
+            .expiresAt(now.plus(2, ChronoUnit.HOURS))
+            .subject(email)
+            .claim("role", role)
+            .build();
 
         JwsHeader header = JwsHeader
-                .with(MacAlgorithm.HS256)
-                .build();
+            .with(MacAlgorithm.HS256)
+            .build();
 
         return jwtEncoder.encode(
-                JwtEncoderParameters.from(header, claims)
+            JwtEncoderParameters.from(header, claims)
         ).getTokenValue();
     }
 }
-

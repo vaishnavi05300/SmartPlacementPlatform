@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 
-const API_URL = "http://localhost:8080";
+const API_URL = "https://smartplacementplatform.onrender.com";
 
 const questions = [
   {

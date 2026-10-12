@@ -16,7 +16,7 @@ import Register from "./Register";
 import SkillAssessment from "./SkillAssessment";
 import AssessmentResults from "./AssessmentResults";
 
-const API_URL = "http://localhost:8080/api/students";
+const API_URL = "https://smartplacementplatform.onrender.com/api/students";
 
 const emptyForm = {
   fullName: "",

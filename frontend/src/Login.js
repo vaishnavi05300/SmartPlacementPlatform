@@ -14,7 +14,7 @@ function Login({ onLogin, onShowRegister }) {
 
     try {
       const response = await fetch(
-        "http://localhost:8080/api/auth/login",
+        "https://smartplacementplatform.onrender.com/api/auth/login",
         {
           method: "POST",
           headers: {

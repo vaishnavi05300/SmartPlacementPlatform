@@ -15,7 +15,6 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/assessments")
-@CrossOrigin(origins = "http://localhost:3000")
 public class AssessmentController {
 
     private final AssessmentResultRepository assessmentRepository;

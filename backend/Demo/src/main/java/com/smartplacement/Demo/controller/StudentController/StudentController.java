@@ -9,7 +9,6 @@ import com.smartplacement.Demo.repository.StudentRepository.StudentRepository;
 
 import java.util.List;
 
-@CrossOrigin(origins = "http://localhost:3000")
 @RestController
 @RequestMapping("/api/students")
 public class StudentController {

@@ -2,6 +2,7 @@
 package com.smartplacement.Demo.service;
 
 import com.nimbusds.jose.jwk.source.ImmutableSecret;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.oauth2.jose.jws.MacAlgorithm;
 import org.springframework.security.oauth2.jwt.*;
 import org.springframework.stereotype.Service;
@@ -17,8 +18,8 @@ public class JwtService {
 
     private final JwtEncoder jwtEncoder;
 
-    public JwtService() {
-        String secret = System.getenv("JWT_SECRET");
+    public JwtService(
+            @Value("${JWT_SECRET}") String secret) {
 
         if (secret == null || secret.length() < 32) {
             throw new IllegalStateException(

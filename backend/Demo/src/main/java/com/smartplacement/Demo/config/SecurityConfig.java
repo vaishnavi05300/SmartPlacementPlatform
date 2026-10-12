@@ -1,6 +1,7 @@
 
 package com.smartplacement.Demo.config;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.Customizer;
@@ -17,14 +18,15 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import javax.crypto.SecretKey;
 import javax.crypto.spec.SecretKeySpec;
 import java.nio.charset.StandardCharsets;
+import java.util.Arrays;
 import java.util.List;
 
 @Configuration
 public class SecurityConfig {
 
     @Bean
-    public JwtDecoder jwtDecoder() {
-        String secret = System.getenv("JWT_SECRET");
+    public JwtDecoder jwtDecoder(
+            @Value("${JWT_SECRET}") String secret) {
 
         if (secret == null || secret.length() < 32) {
             throw new IllegalStateException(
@@ -75,12 +77,18 @@ public class SecurityConfig {
     }
 
     @Bean
-    public CorsConfigurationSource corsConfigurationSource() {
+    public CorsConfigurationSource corsConfigurationSource(
+            @Value("${app.cors.allowed-origins:http://localhost:3000}")
+            String allowedOrigins) {
+
         CorsConfiguration configuration =
             new CorsConfiguration();
 
         configuration.setAllowedOrigins(
-            List.of("http://localhost:3000")
+            Arrays.stream(allowedOrigins.split(","))
+                .map(String::trim)
+                .filter(origin -> !origin.isEmpty())
+                .toList()
         );
 
         configuration.setAllowedMethods(
